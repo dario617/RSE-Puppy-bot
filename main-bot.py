@@ -4,6 +4,7 @@ import logging
 from telegram.ext import Updater, CommandHandler
 import mytoken, check
 
+
 TIME_INTERVAL_SECS = 5
 PUPPY_ADDRESS = "http://200.7.6.134"
 
