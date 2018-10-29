@@ -2,6 +2,7 @@
 from telegram.ext import Updater, CommandHandler
 import mytoken
 import logging
+import requests
 
 global subscribed_users
 subscribed_users = list()
@@ -29,9 +30,25 @@ def hello(bot, update):
     update.message.reply_text(
         'Hello {}'.format(update.message.from_user.first_name))
 
+def checkValidText(text):
+    return True
+
 def checkPuppy(bot, job):
+    # Get the response of the site
+    req = requests.get('http://'+PUPPY_ADDRESS)
+
+    puppy_response = ""
+    if req.status_code == 200:
+        puppy_response = puppy_response + "Site is online, "
+        if checkValidText(req.text):
+            puppy_response = puppy_response + "content is ok"
+        else:
+            puppy_response = puppy_response + "content has errors"
+    else:
+        puppy_response = puppy_response + "Site is down"
+
     for chat in subscribed_users:
-        bot.send_message(chat,text="Checked on puppy")
+        bot.send_message(chat,text="Checked on puppy with ans: "+puppy_response)
 
 def subscribe (bot, update, job_queue):
     chat_id = update.message.chat_id
