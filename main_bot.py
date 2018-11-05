@@ -16,7 +16,7 @@ def main():
     # Say hello!
     updater.dispatcher.add_handler(CommandHandler('hello', hello))
     updater.dispatcher.add_handler(CommandHandler('subscribe',subscribe))
-    updater.job_queue.run_repeating(check_puppy, interval=30, first=10)
+    updater.job_queue.run_repeating(check_puppy, interval=TIME_INTERVAL_SECS, first=10)
 
     updater.start_polling()
     updater.idle()
