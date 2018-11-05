@@ -1,6 +1,5 @@
 import requests, check
 import requests_mock
-import main_bot as mb
 
 def test_do():
     with requests_mock.Mocker() as m:
