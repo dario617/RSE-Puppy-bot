@@ -11,6 +11,6 @@ def test_checkPuppy():
     # Have empty list to avoid test
     subscribed_users = list()
     with requests_mock.Mocker() as m:
-        m.head('http://200.7.6.134', status_code=200, text='resp')
+        m.get('http://200.7.6.134', status_code=200, text='resp')
         ok, resp = check.check_url('http://200.7.6.134')
         assert ok == True
