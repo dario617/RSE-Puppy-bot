@@ -47,7 +47,7 @@ def check_puppy(bot, job):
     if current_status_ok is not last_status_ok:
         for chat_id in data['subs_ids']:
             if not current_status_ok:
-                bot.send_message(chat_id = chat_id, text = "{} is down!".format(PUPPY_ADDRESS))
+                bot.send_message(chat_id = chat_id, text = "{} is down! error: {}".format(PUPPY_ADDRESS,msg))
             else:
                 bot.send_message(chat_id = chat_id, text = "{} is up!".format(PUPPY_ADDRESS))
 
