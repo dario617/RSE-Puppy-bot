@@ -21,7 +21,7 @@ def run(ip, port):
 if __name__ == "__main__":
 	if len(sys.argv) < 3:
 		ip = "127.0.0.1"
-		port = 8081
+		port = 8001
 	else:
 		ip = str(sys.argv[1])
 		port = int(sys.argv[2])

@@ -1,5 +1,5 @@
 #coding: utf-8
-import socket, sys, urllib, argparse
+import socket, sys, argparse
 from thread import *
 
 max_conn = 5
