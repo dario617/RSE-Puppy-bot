@@ -1,5 +1,5 @@
 #coding: utf-8
-import socket, sys, json, urllib
+import socket, sys, urllib, argparse
 from thread import *
 
 max_conn = 5
@@ -8,6 +8,7 @@ buffer_size = 4096
 
 def main(listening_port): #levantamos el server proxy
 	try:
+		print "[*] Inicializando Sockets ..."
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #libreria apertura socket
 		print "[*] Socket bindeando ..."
 		s.bind(('', listening_port)) #bindeo socket, puerto
@@ -34,32 +35,17 @@ def conn_string(conn, addr):
 		request = conn.recv(buffer_size) #recibo la info
 		print "[*] request:", request
 
-		#proxy_server(url, conn)
+		#do something
+
 		conn.close()
 	except Exception, e:
 		#fallo al pasar la info, no hacemos nada, seguimos escuchando
 		print "[*] Error al leer la informacion entrante"
 		conn.close()
 
-def proxy_server(url, conn):
-	try:
-		data = urllib.urlopen(url)
-		mime = data.info()
-		reply = data.read()
-
-		#do shit
-
-		conn.close()
-
-	except Exception, e:
-		conn.close()
-		sys.exit()
-
-
 if __name__ == "__main__":
-	if isinstance(sys.argv,str):
-		print "[*] Inicializando Sockets [ 8081 ] ..."
-		main(8081)
-	else:
-		print "[*] Inicializando Sockets [ %d ] ..." % int(sys.argv[1])
-		main(int(sys.argv[1]))
+	parser = argparse.ArgumentParser(description='Escucha por información en puerto recibido')
+	parser.add_argument('port', metavar='PORT', type=int, help='Puerto para escuchar (default=8001)', nargs='?', default=8001)
+	args = parser.parse_args()
+	main(args.port)
+	
