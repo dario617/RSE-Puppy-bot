@@ -1,5 +1,5 @@
 #coding: utf-8
-import socket, sys, argparse
+import socket, sys, argparse, data_saver
 from thread import *
 
 max_conn = 5
@@ -33,14 +33,12 @@ def main(listening_port): #levantamos el server proxy
 def conn_string(conn, addr):
 	try:
 		request = conn.recv(buffer_size) #recibo la info
-		print "[*] request:", request
-
-		#do something
-
+		#print "[*] request:", request
+		data_saver.save_data(request)
 		conn.close()
 	except Exception, e:
 		#fallo al pasar la info, no hacemos nada, seguimos escuchando
-		print "[*] Error al leer la informacion entrante"
+		print e
 		conn.close()
 
 if __name__ == "__main__":
