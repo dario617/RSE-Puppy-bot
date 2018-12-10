@@ -18,7 +18,7 @@ def check_url(url: str, method: str = 'get') -> Tuple[bool,str]:
 				urls = crawler.getURL(r.content)
 				for url_ in urls:
 					local_r = requests.get(url_, timeout=TIMEOUT_WAIT_TIME)
-					status_ok = local_r.status_code
+					status_ok = local_r.status_code is requests.codes.ok
 					if not status_ok:
 						ok = status_ok
 						msg_err = 'Error de respuesta: contenido con código {}'.format(local_r.status_code)
