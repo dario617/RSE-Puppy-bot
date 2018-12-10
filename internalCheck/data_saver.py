@@ -1,13 +1,36 @@
 #coding: utf-8
+from datetime import datetime
 import json, mysql.connector
 import mysqlcredentials
 
 def text_to_dict(text):
 	try:
-		data = json.loads(text)
-		return data
+		dic = json.loads(text)
+		return dic
 	except ValueError:
 		raise Exception("[*] Error: No se pudo parsear la información enviada")
+
+def dic_to_data(dic):
+	try:
+		new_dict = {}
+		new_dict['date'] = datetime.strptime(dic['date'] , '%d %b %Y %I:%M%p') #day-month-year time https://docs.python.org/2/library/datetime.html#datetime.datetime.strptime
+		new_dict['timezone'] = dic['date']['timezone']
+		new_dict['temp1_cur'] = dic['Temp4']['actual']
+		new_dict['temp1_max'] = dic['Temp4']['max']
+		new_dict['temp2_cur'] = dic['Temp7']['actual']
+		new_dict['temp2_max'] = dic['Temp7']['max']
+		new_dict['temp3_cur'] = dic['Temp10']['actual']
+		new_dict['temp3_max'] = dic['Temp10']['max']
+		new_dict['temp4_cur'] = dic['Temp13']['actual']
+		new_dict['temp4_max'] = dic['Temp13']['max']
+		new_dict['mem_dsp'] = dic['Memory']['disponible']
+		new_dict['mem_use'] = dic['Memory']['usage']
+		new_dict['dsk_dsp'] = dic['Disk']['disponible']
+		new_dict['dsk_use'] = dic['Disk']['usage']
+		new_dict['CPU'] = dic['CPU']
+		return new_dict
+	except Exception:
+		raise Exception("[*] Error: No se pudo reconocer la información enviada")
 
 def data_to_sql(data):
 	try:
@@ -23,7 +46,8 @@ def data_to_sql(data):
 
 def save_data(info):
 	try:
-		data = text_to_dict(info)
+		dic = text_to_dict(info)
+		data = dic_to_data(dic)
 		data_to_sql(data)
 	except Exception, e:
 		raise e
