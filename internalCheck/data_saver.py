@@ -13,7 +13,7 @@ def text_to_dict(text):
 def dic_to_data(dic):
 	try:
 		new_dict = {}
-		new_dict['date'] = datetime.strptime(dic['date'] , '%d %b %Y %I:%M%p') #day-month-year time https://docs.python.org/2/library/datetime.html#datetime.datetime.strptime
+		new_dict['measure_time'] = datetime.strptime(dic['date'] , '%d-%b-%Y %I:%M/%p') #day-month-year time https://docs.python.org/2/library/datetime.html#datetime.datetime.strptime
 		new_dict['timezone'] = dic['date']['timezone']
 		new_dict['temp1_cur'] = dic['Temp4']['actual']
 		new_dict['temp1_max'] = dic['Temp4']['max']
