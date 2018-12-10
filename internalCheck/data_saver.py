@@ -1,7 +1,11 @@
 #coding: utf-8
-from datetime import datetime
-import json, mysql.connector
+import json, mysql.connector, datetime, time
 import mysqlcredentials
+
+def month_to_number(month):
+    m = { 'ene': 1, 'jan': 1, 'feb': 2, 'mar': 3, 'abr':4, 'apr':4, 'may':5, 'jun':6, 'jul':7, 'ago':8, 'aug':8, 'sep':9, 'oct':10, 'nov':11, 'dic':12, 'dec':12 }
+    return m[month]
+
 
 def text_to_dict(text):
 	try:
@@ -13,8 +17,7 @@ def text_to_dict(text):
 def dic_to_data(dic):
 	try:
 		new_dict = {}
-		new_dict['date'] = datetime.strptime(dic['date'] , '%d %b %Y %I:%M%p') #day-month-year time https://docs.python.org/2/library/datetime.html#datetime.datetime.strptime
-		new_dict['timezone'] = dic['date']['timezone']
+		new_dict['measure_time'] = "%d-%d-%d %s" % (dic['Date']['year'], month_to_number(dic['Date']['month']), dic['Date']['day'], dic['Date']['time'])
 		new_dict['temp1_cur'] = dic['Temp4']['actual']
 		new_dict['temp1_max'] = dic['Temp4']['max']
 		new_dict['temp2_cur'] = dic['Temp7']['actual']
