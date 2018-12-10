@@ -1,6 +1,6 @@
 #coding: utf-8
 import socket, sys, argparse, data_saver
-from thread import *
+from _thread import *
 
 max_conn = 5
 buffer_size = 4096
@@ -8,15 +8,15 @@ buffer_size = 4096
 
 def main(listening_port): #levantamos el server proxy
 	try:
-		print "[*] Inicializando Sockets ..."
+		print("[*] Inicializando Sockets ...")
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #libreria apertura socket
-		print "[*] Socket bindeando ..."
+		print("[*] Socket bindeando ...")
 		s.bind(('', listening_port)) #bindeo socket, puerto
-		print "[*] Escuchando al Socket [ %d ]" % listening_port
+		print("[*] Escuchando al Socket [ %d ]" % listening_port)
 		s.listen(max_conn) #empiezo a escuchar socket		
-		print "[*] Socket inicializado!"
-	except Exception, e:
-		print "[*] Error al inicializar el Socket" #en caso de error, todo a las pailas
+		print("[*] Socket inicializado!")
+	except Exception as e:
+		print("[*] Error al inicializar el Socket") #en caso de error, todo a las pailas
 		sys.exit(2)
 
 	while 1: #me quedo escuchando
@@ -25,7 +25,7 @@ def main(listening_port): #levantamos el server proxy
 			start_new_thread(conn_string, (conn, addr)) #creo un thread para manejar la conexión
 		except KeyboardInterrupt: #cierro proxy con ctrl+c, pero que se vea lindo
 			s.close()
-			print "\n[*] Cerrando Server Proxy ..."
+			print("\n[*] Cerrando Server Proxy ...")
 			sys.exit(1)
 	s.close()
 
@@ -34,11 +34,12 @@ def conn_string(conn, addr):
 	try:
 		request = conn.recv(buffer_size) #recibo la info
 		#print "[*] request:", request
-		data_saver.save_data(request)
+		data_saver.save_data(request.decode('utf-8'))
 		conn.close()
-	except Exception, e:
+		print("[*] Datos insertados :)!")
+	except Exception as e:
 		#fallo al pasar la info, no hacemos nada, seguimos escuchando
-		print e
+		print(e)
 		conn.close()
 
 if __name__ == "__main__":

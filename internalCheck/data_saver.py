@@ -1,5 +1,5 @@
 #coding: utf-8
-import json, mysql.connector, datetime, time
+import json, pymysql, datetime, time
 import mysqlcredentials
 
 def month_to_number(month):
@@ -29,7 +29,7 @@ def dic_to_data(dic):
 		new_dict['mem_dsp'] = dic['Memory']['disponible']
 		new_dict['mem_use'] = dic['Memory']['usage']
 		new_dict['dsk_dsp'] = dic['Disk']['disponible']
-		new_dict['dsk_use'] = dic['Disk']['usage']
+		new_dict['disk_use'] = dic['Disk']['usage']
 		new_dict['CPU'] = dic['CPU']
 		return new_dict
 	except Exception:
@@ -37,20 +37,24 @@ def dic_to_data(dic):
 
 def data_to_sql(data):
 	try:
-		cnx = mysql.connector.connect(user=mysqlcredentials.USER, password=mysqlcredentials.PASS,
-										host=mysqlcredentials.HOST, database=mysqlcredentials.DB)
+		cnx = pymysql.connect(user=mysqlcredentials.USER, passwd=mysqlcredentials.PASS,
+										host=mysqlcredentials.HOST, db=mysqlcredentials.DB, port=3306)
+		table = "measurements"
 		cursor = cnx.cursor()
 		placeholders = ', '.join(['%s'] * len(data))
 		columns = ', '.join(data.keys())
-		sql = "INSERT INTO %s ( %s ) VALUES ( %s )" % (table, columns, placeholders)
-		cursor.execute(sql, data.values())
-	except Exception:
-		raise Exception("[*] Error: No se pudo guardar la información enviada")
+		sql = "INSERT INTO %s ( %s ) VALUES ( %s )" % (table , columns, placeholders)
+		cursor.execute(sql, list(data.values()))
+		cnx.commit()
+		cnx.close()
+	except Exception as e:
+		raise e
+		#raise Exception("[*] Error: No se pudo guardar la información enviada")
 
 def save_data(info):
 	try:
 		dic = text_to_dict(info)
 		data = dic_to_data(dic)
 		data_to_sql(data)
-	except Exception, e:
+	except Exception as e:
 		raise e
