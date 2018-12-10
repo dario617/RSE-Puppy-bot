@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mysql-service:
+    build: ./mysql
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+
+  grafana-service:
+    build: ./grafana
+    container_name: grafana
+    restart: always
+    depends_on:
+      - mysql-service
+    ports:
+      - "3000:3000"
